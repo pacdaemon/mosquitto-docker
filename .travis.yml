@@ -1,0 +1,16 @@
+sudo: required
+
+services:
+  - docker
+
+script:
+  - docker run --rm --privileged multiarch/qemu-user-static:register --reset
+  - docker build -t pacdaemon/mosquitto-rpi .
+  - docker tag pacdaemon/mosquitto-rpi pacdaemon/mosquitto-rpi:latest
+  - docker tag pacdaemon/mosquitto-rpi pacdaemon/mosquitto-rpi:1.5
+
+deploy:
+  provider: script
+  script: bash docker_push.sh
+  on:
+    branch: master
